@@ -2,6 +2,10 @@
 Vinicius Trindade <vinicius@email.com>
 v1.0, 2025-07-02
 
+== Introdução
+
+Para facilitar a criação do banco de dados de teste, siga os passos do artigo no link: https://medium.com/@alan-vieira/rodando-mysql-no-docker-e6e05b727196
+
 == Objetivo
 
 Esta documentação descreve os passos para configurar um projeto Java utilizando Maven para se conectar a um banco de dados MySQL.
