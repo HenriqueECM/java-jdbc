@@ -12,7 +12,7 @@ Esta documentação descreve os passos para configurar um projeto Java utilizand
 
 == 1. Criar o Projeto Maven
 
-Crie um novo projeto Maven no intellij
+Crie um novo projeto Maven no IntelliJ
 
 == 2. Adicionar dependência do MySQL no `pom.xml`
 
@@ -75,4 +75,128 @@ public class Main {
         }
     }
 }
+----
+
+== 5. Criar Tabela no MySQL
+
+Execute a seguinte query diretamente no MySQL Workbench para criar a tabela de usuários:
+
+[source, sql]
+----
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    email VARCHAR(100)
+);
+----
+
+== 6. Criar Classe UsuarioDAO
+
+Crie a classe `UsuarioDAO` para realizar inserções de dados na tabela `usuarios`:
+
+[source, java]
+----
+package org.example;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class UsuarioDAO {
+
+    public void inserir(String nome, String email) {
+        String sql = "INSERT INTO usuarios (nome, email) VALUES (?, ?)";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+
+            System.out.println("Usuário inserido com sucesso!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+----
+
+== 7. Exercícios Práticos com Inserção no Banco de Dados
+
+A seguir, você deve criar as tabelas diretamente no **MySQL Workbench** e implementar métodos Java utilizando `PreparedStatement` para inserir registros nas tabelas correspondentes.
+
+=== Exercício 1 – Tabela `alunos`
+
+> Crie a tabela `alunos` diretamente no **MySQL Workbench** para armazenar informações como nome, matrícula e curso.  
+> Em seguida, implemente um método Java que insira um aluno na tabela utilizando `PreparedStatement`.
+
+[source, sql]
+----
+CREATE TABLE alunos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    matricula VARCHAR(20),
+    curso VARCHAR(100)
+);
+----
+
+=== Exercício 2 – Tabela `produtos`
+
+> Crie a tabela `produtos` diretamente no **MySQL Workbench** para cadastrar produtos com nome, preço e quantidade em estoque.  
+> Em seguida, implemente um método Java que insira um produto na tabela utilizando `PreparedStatement`.
+
+[source, sql]
+----
+CREATE TABLE produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    preco DECIMAL(10,2),
+    quantidade INT
+);
+----
+
+=== Exercício 3 – Tabela `pedidos`
+
+> Crie a tabela `pedidos` diretamente no **MySQL Workbench** para registrar pedidos com cliente, data e valor total.  
+> Em seguida, implemente um método Java que insira um pedido na tabela utilizando `PreparedStatement`.
+
+[source, sql]
+----
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente VARCHAR(100),
+    data_pedido DATE,
+    total DECIMAL(10,2)
+);
+----
+
+=== Exercício 4 – Tabela `livros`
+
+> Crie a tabela `livros` diretamente no **MySQL Workbench** para armazenar livros com título, autor e ano de publicação.  
+> Em seguida, implemente um método Java que insira um livro na tabela utilizando `PreparedStatement`.
+
+[source, sql]
+----
+CREATE TABLE livros (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(200),
+    autor VARCHAR(100),
+    ano_publicacao INT
+);
+----
+
+=== Exercício 5 – Tabela `funcionarios`
+
+> Crie a tabela `funcionarios` diretamente no **MySQL Workbench** para cadastrar nome, cargo e salário dos funcionários.  
+> Em seguida, implemente um método Java que insira um funcionário na tabela utilizando `PreparedStatement`.
+
+[source, sql]
+----
+CREATE TABLE funcionarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    cargo VARCHAR(50),
+    salario DECIMAL(10,2)
+);
 ----
