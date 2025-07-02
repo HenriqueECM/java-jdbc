@@ -1,0 +1,74 @@
+= Documentação: Conexão Java com Maven e MySQL
+Vinicius Trindade <vinicius@email.com>
+v1.0, 2025-07-02
+
+== Objetivo
+
+Esta documentação descreve os passos para configurar um projeto Java utilizando Maven para se conectar a um banco de dados MySQL.
+
+== 1. Criar o Projeto Maven
+
+Crie um novo projeto Maven no intellij
+
+== 2. Adicionar dependência do MySQL no `pom.xml`
+
+Abra o arquivo `pom.xml` e adicione a dependência do conector JDBC do MySQL:
+
+[source, xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.0.33</version>
+    </dependency>
+</dependencies>
+----
+
+== 3. Criar Classe de Conexão
+
+Crie uma classe `Conexao.java` para realizar a conexão com o banco:
+
+[source, java]
+----
+package com.exemplo;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Conexao {
+    private static final String URL = "jdbc:mysql://localhost:3306/nomedobanco?useSSL=false&serverTimezone=UTC";
+    private static final String USUARIO = "root";
+    private static final String SENHA = "sua_senha";
+
+    public static Connection conectar() throws SQLException {
+        return DriverManager.getConnection(URL, USUARIO, SENHA);
+    }
+}
+----
+
+== 4. Classe Principal
+
+Crie a classe `Main.java` para testar a conexão:
+
+[source, java]
+----
+package com.exemplo;
+
+import java.sql.Connection;
+
+public class Main {
+    public static void main(String[] args) {
+        try (Connection conn = Conexao.conectar()) {
+            if (conn != null) {
+                System.out.println("Conexão realizada com sucesso!");
+            } else {
+                System.out.println("Falha na conexão.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+----
