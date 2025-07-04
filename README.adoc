@@ -8,11 +8,11 @@ Para facilitar a criação do banco de dados de teste, siga os passos do artigo 
 
 == Objetivo
 
-Esta documentação descreve os passos para configurar um projeto Java utilizando Maven para se conectar a um banco de dados MySQL.
+Esta documentação descreve os passos para configurar um projeto Java utilizando Maven para se conectar a um banco de dados MySQL, realizar inserções, atualizações e exclusões de dados.
 
 == 1. Criar o Projeto Maven
 
-Crie um novo projeto Maven no IntelliJ
+Crie um novo projeto Maven no IntelliJ.
 
 == 2. Adicionar dependência do MySQL no `pom.xml`
 
@@ -90,7 +90,7 @@ CREATE TABLE usuarios (
 );
 ----
 
-== 6. Criar Classe UsuarioDAO
+== 6. Classe UsuarioDAO com Inserção
 
 Crie a classe `UsuarioDAO` para realizar inserções de dados na tabela `usuarios`:
 
@@ -122,14 +122,9 @@ public class UsuarioDAO {
 }
 ----
 
-== 7. Exercícios Práticos com Inserção no Banco de Dados
-
-A seguir, você deve criar as tabelas diretamente no **MySQL Workbench** e implementar métodos Java utilizando `PreparedStatement` para inserir registros nas tabelas correspondentes.
+== 7. Exercícios Práticos de Inserção
 
 === Exercício 1 – Tabela `alunos`
-
-> Crie a tabela `alunos` diretamente no **MySQL Workbench** para armazenar informações como nome, matrícula e curso.  
-> Em seguida, implemente um método Java que insira um aluno na tabela utilizando `PreparedStatement`.
 
 [source, sql]
 ----
@@ -141,10 +136,9 @@ CREATE TABLE alunos (
 );
 ----
 
-=== Exercício 2 – Tabela `produtos`
+Crie um método Java para inserir um aluno utilizando `PreparedStatement`.
 
-> Crie a tabela `produtos` diretamente no **MySQL Workbench** para cadastrar produtos com nome, preço e quantidade em estoque.  
-> Em seguida, implemente um método Java que insira um produto na tabela utilizando `PreparedStatement`.
+=== Exercício 2 – Tabela `produtos`
 
 [source, sql]
 ----
@@ -156,10 +150,9 @@ CREATE TABLE produtos (
 );
 ----
 
-=== Exercício 3 – Tabela `pedidos`
+Implemente um método Java para inserir um produto.
 
-> Crie a tabela `pedidos` diretamente no **MySQL Workbench** para registrar pedidos com cliente, data e valor total.  
-> Em seguida, implemente um método Java que insira um pedido na tabela utilizando `PreparedStatement`.
+=== Exercício 3 – Tabela `pedidos`
 
 [source, sql]
 ----
@@ -171,10 +164,9 @@ CREATE TABLE pedidos (
 );
 ----
 
-=== Exercício 4 – Tabela `livros`
+Implemente um método Java para inserir um pedido.
 
-> Crie a tabela `livros` diretamente no **MySQL Workbench** para armazenar livros com título, autor e ano de publicação.  
-> Em seguida, implemente um método Java que insira um livro na tabela utilizando `PreparedStatement`.
+=== Exercício 4 – Tabela `livros`
 
 [source, sql]
 ----
@@ -186,10 +178,9 @@ CREATE TABLE livros (
 );
 ----
 
-=== Exercício 5 – Tabela `funcionarios`
+Implemente um método Java para inserir um livro.
 
-> Crie a tabela `funcionarios` diretamente no **MySQL Workbench** para cadastrar nome, cargo e salário dos funcionários.  
-> Em seguida, implemente um método Java que insira um funcionário na tabela utilizando `PreparedStatement`.
+=== Exercício 5 – Tabela `funcionarios`
 
 [source, sql]
 ----
@@ -200,3 +191,102 @@ CREATE TABLE funcionarios (
     salario DECIMAL(10,2)
 );
 ----
+
+Implemente um método Java para inserir um funcionário.
+
+== 8. Atualizar Registros com PreparedStatement
+
+Você pode atualizar registros existentes utilizando a cláusula `UPDATE`.
+
+=== Exemplo: Atualizar o email de um usuário
+
+[source, java]
+----
+public void atualizarEmail(String nome, String novoEmail) {
+    String sql = "UPDATE usuarios SET email = ? WHERE nome = ?";
+
+    try (Connection conn = Conexao.conectar();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, novoEmail);
+        stmt.setString(2, nome);
+        stmt.executeUpdate();
+
+        System.out.println("Email atualizado com sucesso!");
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+----
+
+== 9. Exercícios Práticos de Atualização
+
+=== Exercício 6 – Atualizar Curso de um Aluno
+
+Atualize o curso de um aluno com base na matrícula.
+
+=== Exercício 7 – Atualizar Preço de um Produto
+
+Atualize o preço de um produto com base no nome.
+
+=== Exercício 8 – Atualizar Valor Total de um Pedido
+
+Atualize o valor total de um pedido com base no ID.
+
+=== Exercício 9 – Atualizar Autor de um Livro
+
+Atualize o autor de um livro com base no título.
+
+=== Exercício 10 – Atualizar Salário de um Funcionário
+
+Atualize o salário com base no nome do funcionário.
+
+== 10. Deletar Registros com PreparedStatement
+
+Para remover registros, utilize a cláusula `DELETE`.
+
+=== Exemplo: Deletar um usuário pelo nome
+
+[source, java]
+----
+public void deletarUsuario(String nome) {
+    String sql = "DELETE FROM usuarios WHERE nome = ?";
+
+    try (Connection conn = Conexao.conectar();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, nome);
+        stmt.executeUpdate();
+
+        System.out.println("Usuário deletado com sucesso!");
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+----
+
+== 11. Exercícios Práticos de Deleção
+
+=== Exercício 11 – Deletar Aluno
+
+Remova um aluno com base na matrícula.
+
+=== Exercício 12 – Deletar Produto
+
+Remova um produto com base no nome.
+
+=== Exercício 13 – Deletar Pedido
+
+Remova um pedido com base no ID.
+
+=== Exercício 14 – Deletar Livro
+
+Remova um livro com base no título.
+
+=== Exercício 15 – Deletar Funcionário
+
+Remova um funcionário com base no nome.
+
+== Considerações Finais
+
+Utilizar `PreparedStatement` ajuda a prevenir ataques de SQL Injection e promove segurança nas operações com banco de dados. Pratique os exercícios propostos e evolua implementando métodos de busca (`SELECT`) em etapas futuras.
