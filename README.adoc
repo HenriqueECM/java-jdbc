@@ -287,6 +287,124 @@ Remova um livro com base no título.
 
 Remova um funcionário com base no nome.
 
+== 12. Buscar Registros com SELECT
+
+Você pode utilizar o `PreparedStatement` também para fazer buscas no banco. Veja abaixo dois exemplos: listar todos os usuários e buscar por um usuário específico pelo ID.
+
+=== Exemplo: Listar todos os usuários
+
+[source, java]
+----
+public static List<Usuario> listar() {
+    String sql = "SELECT id,nome,email FROM usuarios";
+    List<Usuario> usuarios = new ArrayList<>();
+    try (Connection conn = Conexao.conectar();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nome = rs.getString("nome");
+            String email = rs.getString("email");
+
+            Usuario usuario = new Usuario(id, nome, email);
+            usuarios.add(usuario);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return usuarios;
+}
+----
+
+=== Exemplo: Buscar um usuário por ID
+
+[source, java]
+----
+public static Usuario listarPorId(int id) {
+    String sql = "SELECT id, nome, email FROM usuarios WHERE id = ?";
+    int newId = 0;
+    String nome = "";
+    String email = "";
+
+    try (Connection conn = Conexao.conectar();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery(); 
+
+        if (rs.next()) { 
+            newId = rs.getInt("id");
+            nome = rs.getString("nome");
+            email = rs.getString("email");
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return new Usuario(newId, nome, email);
+}
+----
+
+=== Exemplo de uso no Main
+
+[source, java]
+----
+public class Main {
+    public static void main(String[] args) {
+        // Buscar um usuário por ID
+        Usuario usuario = UsuarioDAO.listarPorId(3);
+        System.out.println(usuario);
+
+        // Listar todos os usuários
+        List<Usuario> lista = UsuarioDAO.listar();
+        for (Usuario u : lista) {
+            System.out.println(u);
+        }
+    }
+}
+----
+
+== 13. Inserção de múltiplos registros para prática
+
+Utilize o script abaixo para popular a tabela `usuarios` com dados de teste:
+
+[source, sql]
+----
+INSERT INTO usuarios (nome, email) VALUES
+('Ana Souza', 'ana.souza@email.com'),
+('Bruno Lima', 'bruno.lima@email.com'),
+('Carla Mendes', 'carla.mendes@email.com'),
+('Daniel Rocha', 'daniel.rocha@email.com'),
+('Eduarda Farias', 'eduarda.farias@email.com'),
+('Felipe Martins', 'felipe.martins@email.com'),
+('Gabriela Silva', 'gabriela.silva@email.com'),
+('Henrique Alves', 'henrique.alves@email.com'),
+('Isabela Duarte', 'isabela.duarte@email.com'),
+('João Pedro', 'joao.pedro@email.com');
+----
+
+== 14. Atividades Práticas com SELECT
+
+=== Atividade 1 – Listar todos os usuários
+
+Implemente uma interface de terminal ou GUI (ex: JOptionPane) que exiba todos os usuários cadastrados.
+
+=== Atividade 2 – Buscar um usuário por ID
+
+Solicite ao usuário que digite um ID, e exiba na tela o nome e email correspondentes.
+
+=== Atividade 3 – Exibir usuários com emails de um domínio específico
+
+Adapte o método `listar()` para filtrar usuários cujo email termina com `@email.com`.
+
+=== Atividade 4 – Contar quantos usuários estão cadastrados
+
+Utilize `SELECT COUNT(*)` e exiba a quantidade de registros da tabela `usuarios`.
+
 == Considerações Finais
 
 Utilizar `PreparedStatement` ajuda a prevenir ataques de SQL Injection e promove segurança nas operações com banco de dados. Pratique os exercícios propostos e evolua implementando métodos de busca (`SELECT`) em etapas futuras.
