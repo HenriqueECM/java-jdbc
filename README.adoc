@@ -125,7 +125,7 @@ public class UsuarioDAO {
 
 ---
 
-== 8. Atualizar Registros com PreparedStatement
+== 7. Atualizar Registros com PreparedStatement
 
 Você pode atualizar registros existentes utilizando a cláusula `UPDATE`.
 
@@ -152,7 +152,7 @@ public void atualizarEmail(String nome, String novoEmail) {
 
 ---
 
-== 10. Deletar Registros com PreparedStatement
+== 8. Deletar Registros com PreparedStatement
 
 Para remover registros, utilize a cláusula `DELETE`.
 
@@ -178,7 +178,7 @@ public void deletarUsuario(String nome) {
 
 ---
 
-== 12. Buscar Registros com SELECT
+== 9. Buscar Registros com SELECT
 
 Você pode utilizar o `PreparedStatement` também para fazer buscas no banco. Veja abaixo dois exemplos: listar todos os usuários e buscar por um usuário específico pelo ID.
 
